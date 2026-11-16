@@ -1,0 +1,25 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-failure-test
+  namespace: mlops-task
+  labels:
+    app: init-failure-test
+spec:
+  restartPolicy: Always
+  initContainers:
+    - name: init-done
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "Intentional initialization failure"
+          exit 1
+
+  containers:
+    - name: nginx
+      image: nginx:1.27-alpine
+      ports:
+        - containerPort: 80
